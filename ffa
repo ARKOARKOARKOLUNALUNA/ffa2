@@ -1,8 +1,5 @@
 setclipboard("https://discord.gg/yabu")
 
-
-
-
 local lp = game:GetService("Players").LocalPlayer
 local pGui = lp:WaitForChild("PlayerGui")
 
@@ -20,7 +17,7 @@ local function Notify(text)
     frame.Font = Enum.Font.GothamBold
     frame.TextSize = 14
     frame.Transparency = 0.1
-     frame.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
+    frame.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
     task.spawn(function()
         task.wait(3)
         sg:Destroy()
@@ -33,9 +30,6 @@ end
 
 
 setclipboard("https://discord.gg/ZbKkP2X7ps")
-
-
-
 
 
 if not game:IsLoaded() then game.Loaded:Wait() end
@@ -52,9 +46,14 @@ local PLACE_ID = game.PlaceId
 
 local fullServerBlacklist = {}
 fullServerBlacklist[game.JobId] = true 
+
 local function Hop(reason)
     print("!! TRIGGERED !! Reason: " .. reason)
     
+    pcall(function()
+        TeleportService:SetTeleportGui(Instance.new("ScreenGui"))
+    end)
+
     local function fetchAndTeleport()
         local url = 'https://games.roblox.com/v1/games/' .. PLACE_ID .. '/servers/Public?sortOrder=Desc&limit=100'
         local success, result = pcall(function()
@@ -63,17 +62,17 @@ local function Hop(reason)
 
         if success and result and result.data then
             for _, s in pairs(result.data) do
-                if not fullServerBlacklist[s.id] and tonumber(s.playing) < tonumber(s.maxPlayers) then
+                if s.id ~= game.JobId and not fullServerBlacklist[s.id] and tonumber(s.playing) < tonumber(s.maxPlayers) then
                     print("Attempting join: " .. s.id)
-                    local tpSuccess, tpError = pcall(function()
+                    local tpSuccess = pcall(function()
                         TeleportService:TeleportToPlaceInstance(PLACE_ID, s.id, lp)
                     end)
                     
                     if not tpSuccess then
                         fullServerBlacklist[s.id] = true
-                        task.wait(1)
+                        task.wait(0.5)
                     else
-                        return true 
+                        task.wait(5)
                     end
                 end
             end
@@ -82,10 +81,11 @@ local function Hop(reason)
     end
 
     while true do
-        if fetchAndTeleport() then break end
+        fetchAndTeleport()
         task.wait(3)
     end
 end
+
 local function forceClick(obj)
     if not obj then return end
     pcall(function()
@@ -100,29 +100,29 @@ local function forceClick(obj)
         obj:Activate()
     end)
 end
-  task.spawn(function()
-    task.wait(1) 
+
+task.spawn(function()
+    task.wait(15) 
     while true do
-        task.wait(10) 
+        task.wait(2) 
         local activePlayers = 0
         local jewFound = false
+        
         for _, v in pairs(pGui:GetDescendants()) do
             if v:IsA("TextLabel") and v.Visible then
-                
-                
+                -- Check for player count using the @ symbol
+                if v.Text:find("@") and v.Text ~= "" then
+                    activePlayers = activePlayers + 1
+                end
+
+               
                 local cleanText = v.Text:gsub("%D", "")
                 local val = #cleanText > 0 and tonumber(cleanText)
                 
-                if val then
-                    if val >= JEW_LIMIT then
-                        if v.Name:lower():find("point") or v.Parent.Name:lower():find("score") then
-                            jewFound = true
-                        end
+                if val and val >= JEW_LIMIT then
+                    if v.Name:lower():find("point") or v.Parent.Name:lower():find("score") or v.Parent.Name:lower():find("row") then
+                        jewFound = true
                     end
-                end
-
-                if v.Text:find("@") and v.Text ~= "" then
-                    activePlayers = activePlayers + 1
                 end
             end
         end
@@ -138,6 +138,7 @@ end
         end
     end
 end)
+
 task.spawn(function()
     task.wait(5)
     for _, v in pairs(pGui:GetDescendants()) do
@@ -155,13 +156,11 @@ task.spawn(function()
     end
 end)
 
-
 Notify("Script loaded, discord copied to clipboard") 
-
 
 -- gg/yabu
 -- this was made by arko :(  (aka luna)
 -- i hate jews and niggers
 -- change min niggers to the number ofppl when u want to server hop
 -- i would make ui to make that part easier but im bad at them
--- idk if it will get detected for cheats 
+-- idk if it will get detected for cheats
