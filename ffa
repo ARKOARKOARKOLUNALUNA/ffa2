@@ -9,7 +9,6 @@ local pGui = lp:WaitForChild("PlayerGui")
 local function Notify(text)
     local sg = Instance.new("ScreenGui")
     sg.Name = "DiscordInviteGui"
-    sg.DisplayOrder = 999 
     sg.Parent = pGui
     
     local frame = Instance.new("TextLabel", sg)
