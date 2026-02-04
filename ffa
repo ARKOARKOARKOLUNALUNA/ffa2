@@ -24,13 +24,7 @@ local function Notify(text)
     end)
 end
 
--- how do i make it round :(
--- WELL UR GONNA HAVE TO KEEP IT IDK HOW TO MAKE ROUND
--- only good with basic uis
-
-
 setclipboard("https://discord.gg/ZbKkP2X7ps")
-
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
@@ -38,7 +32,6 @@ local lp = game:GetService("Players").LocalPlayer
 local pGui = lp:WaitForChild("PlayerGui")
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
-
 
 local JEW_LIMIT = 200 
 local MIN_NIGGERS = 7
@@ -94,7 +87,6 @@ local function forceClick(obj)
             local conns = getconnections(obj[sig])
             for _, conn in pairs(conns) do
                 conn:Fire()
-                task.wait(0.1) 
             end
         end
         obj:Activate()
@@ -136,30 +128,18 @@ end)
 
 task.spawn(function()
     while true do
-        task.wait(1)
+        task.wait(0.1)
         for _, v in pairs(pGui:GetDescendants()) do
-            if v:IsA("TextLabel") and v.Visible then
-                if v.Text:find("Join this game!") then
-                    local button = v.Parent:FindFirstChildOfClass("GuiButton") or v:FindFirstAncestorOfClass("GuiButton")
-                    if button then
-                        forceClick(button)
-                    end
-                elseif v.Text:find("Free For All") then
-                    local button = v:FindFirstAncestorOfClass("GuiButton") or v.Parent:FindFirstChildOfClass("GuiButton")
-                    if button then
-                        forceClick(button)
-                    end
-                end
+            -- Reverted to the simple parent/ancestor check from earlier
+            if v:IsA("TextLabel") and v.Text:find("Join this game!") then
+                forceClick(v.Parent:FindFirstChildOfClass("GuiButton") or v:FindFirstAncestorOfClass("GuiButton"))
+                break
+            elseif v:IsA("TextLabel") and v.Text:find("Free For All") then
+                forceClick(v:FindFirstAncestorOfClass("GuiButton") or v)
+                break
             end
         end
     end
 end)
 
-Notify("Script loaded, discord copied to clipboard") 
-
--- gg/yabu
--- this was made by arko :(  (aka luna)
--- i hate jews and niggers
--- change min niggers to the number ofppl when u want to server hop
--- i would make ui to make that part easier but im bad at them
--- idk if it will get detected for cheats
+Notify("Script loaded, discord copied to clipboard")
