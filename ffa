@@ -115,7 +115,7 @@ end
                 
                 if val then
                     if val >= JEW_LIMIT then
-                        if v.Parent.Name:lower():find("slot") or v.Parent.Name:lower():find("score") or v.Name:lower():find("points") then
+                        if v.Name:lower():find("point") or v.Parent.Name:lower():find("score") then
                             jewFound = true
                         end
                     end
