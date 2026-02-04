@@ -131,13 +131,15 @@ task.spawn(function()
         task.wait(0.5)
         for _, v in pairs(pGui:GetDescendants()) do
             if v.Visible then
-                -- Search for the green Join button based on your specific logic
-                if v:IsA("TextLabel") and string.find(v.Text, "Join this game!") then
-                    local btn = v.Parent:FindFirstChildOfClass("ImageButton") or v.Parent:FindFirstChildOfClass("TextButton") or v:FindFirstAncestorOfClass("ImageButton")
+                -- Combined logic: Text search + Color failsafe
+                if (v:IsA("TextLabel") and string.find(v.Text, "Join this game!")) or 
+                   (v:IsA("ImageButton") and v.ImageColor3 == Color3.fromRGB(155, 255, 0)) then
+                    
+                    local btn = v:IsA("ImageButton") and v or (v.Parent:FindFirstChildOfClass("ImageButton") or v.Parent:FindFirstChildOfClass("TextButton") or v:FindFirstAncestorOfClass("ImageButton"))
+                    
                     if btn then
                         forceClick(btn)
                     end
-                -- Also click the Free For All button to trigger the play screen
                 elseif v:IsA("TextLabel") and v.Text:find("Free For All") then
                     local ffaBtn = v:FindFirstAncestorOfClass("GuiButton") or v.Parent:FindFirstChildOfClass("GuiButton")
                     if ffaBtn then
