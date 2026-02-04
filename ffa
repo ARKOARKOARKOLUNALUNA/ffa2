@@ -103,7 +103,7 @@ end
   task.spawn(function()
     task.wait(15) 
     while true do
-        task.wait(5) 
+        task.wait(15) 
         local activePlayers = 0
         local jewFound = false
         for _, v in pairs(pGui:GetDescendants()) do
