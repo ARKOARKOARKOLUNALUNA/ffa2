@@ -128,15 +128,22 @@ end)
 
 task.spawn(function()
     while true do
-        task.wait(0.1)
+        task.wait(0.5)
         for _, v in pairs(pGui:GetDescendants()) do
-            -- Reverted to the simple parent/ancestor check from earlier
-            if v:IsA("TextLabel") and v.Text:find("Join this game!") then
-                forceClick(v.Parent:FindFirstChildOfClass("GuiButton") or v:FindFirstAncestorOfClass("GuiButton"))
-                break
-            elseif v:IsA("TextLabel") and v.Text:find("Free For All") then
-                forceClick(v:FindFirstAncestorOfClass("GuiButton") or v)
-                break
+            if v.Visible then
+                -- Search for the green Join button based on your specific logic
+                if v:IsA("TextLabel") and string.find(v.Text, "Join this game!") then
+                    local btn = v.Parent:FindFirstChildOfClass("ImageButton") or v.Parent:FindFirstChildOfClass("TextButton") or v:FindFirstAncestorOfClass("ImageButton")
+                    if btn then
+                        forceClick(btn)
+                    end
+                -- Also click the Free For All button to trigger the play screen
+                elseif v:IsA("TextLabel") and v.Text:find("Free For All") then
+                    local ffaBtn = v:FindFirstAncestorOfClass("GuiButton") or v.Parent:FindFirstChildOfClass("GuiButton")
+                    if ffaBtn then
+                        forceClick(ffaBtn)
+                    end
+                end
             end
         end
     end
