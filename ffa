@@ -101,7 +101,7 @@ local function forceClick(obj)
     end)
 end
   task.spawn(function()
-    task.wait(15) 
+    task.wait(1) 
     while true do
         task.wait(15) 
         local activePlayers = 0
