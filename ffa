@@ -1,5 +1,46 @@
 setclipboard("https://discord.gg/yabu")
 
+
+
+
+local lp = game:GetService("Players").LocalPlayer
+local pGui = lp:WaitForChild("PlayerGui")
+
+local function Notify(text)
+    local sg = Instance.new("ScreenGui")
+    sg.Name = "DiscordInviteGui"
+    sg.DisplayOrder = 999 
+    sg.Parent = pGui
+    
+    local frame = Instance.new("TextLabel", sg)
+    frame.Size = UDim2.new(0, 280, 0, 60)
+    frame.Position = UDim2.new(1, -300, 1, -100) 
+    
+    frame.Text = text
+    frame.TextColor3 = Color3.fromRGB(255, 255, 255)
+    frame.Font = Enum.Font.GothamBold
+    frame.TextSize = 14
+    frame.Transparency = 0.1
+     frame.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
+    task.spawn(function()
+        task.wait(3)
+        sg:Destroy()
+    end)
+end
+
+-- how do i make it round :(
+-- WELL UR GONNA HAVE TO KEEP IT IDK HOW TO MAKE ROUND
+-- only good with basic uis
+
+
+setclipboard("https://discord.gg/ZbKkP2X7ps")
+
+
+
+
+
+if not game:IsLoaded() then game.Loaded:Wait() end
+
 local lp = game:GetService("Players").LocalPlayer
 local pGui = lp:WaitForChild("PlayerGui")
 local HttpService = game:GetService("HttpService")
@@ -10,34 +51,11 @@ local JEW_LIMIT = 200
 local MIN_NIGGERS = 7
 local PLACE_ID = game.PlaceId
 
-setclipboard("https://discord.gg/ZbKkP2X7ps")
-
-local function Notify(text)
-    local sg = Instance.new("ScreenGui")
-    sg.Name = "DiscordInviteGui"
-    sg.Parent = pGui
-    local frame = Instance.new("TextLabel", sg)
-    frame.Size = UDim2.new(0, 280, 0, 60)
-    frame.Position = UDim2.new(1, -300, 1, -100) 
-    frame.Text = text
-    frame.TextColor3 = Color3.fromRGB(255, 255, 255)
-    frame.Font = Enum.Font.GothamBold
-    frame.TextSize = 14
-    frame.Transparency = 0.1
-    frame.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
-    task.spawn(function()
-        task.wait(3)
-        sg:Destroy()
-    end)
-end
-
 local fullServerBlacklist = {}
 fullServerBlacklist[game.JobId] = true 
-
 local function Hop(reason)
     print("!! TRIGGERED !! Reason: " .. reason)
-    pcall(function() TeleportService:SetTeleportGui(Instance.new("ScreenGui")) end)
-
+    
     local function fetchAndTeleport()
         local url = 'https://games.roblox.com/v1/games/' .. PLACE_ID .. '/servers/Public?sortOrder=Desc&limit=100'
         local success, result = pcall(function()
@@ -46,16 +64,17 @@ local function Hop(reason)
 
         if success and result and result.data then
             for _, s in pairs(result.data) do
-                if s.id ~= game.JobId and not fullServerBlacklist[s.id] and tonumber(s.playing) < tonumber(s.maxPlayers) then
+                if not fullServerBlacklist[s.id] and tonumber(s.playing) < tonumber(s.maxPlayers) then
                     print("Attempting join: " .. s.id)
-                    local tpSuccess = pcall(function()
+                    local tpSuccess, tpError = pcall(function()
                         TeleportService:TeleportToPlaceInstance(PLACE_ID, s.id, lp)
                     end)
+                    
                     if not tpSuccess then
                         fullServerBlacklist[s.id] = true
-                        task.wait(0.5)
+                        task.wait(1)
                     else
-                        task.wait(5)
+                        return true 
                     end
                 end
             end
@@ -64,84 +83,86 @@ local function Hop(reason)
     end
 
     while true do
-        fetchAndTeleport()
+        if fetchAndTeleport() then break end
         task.wait(3)
     end
 end
-
-
-task.spawn(function()
+local function forceClick(obj)
+    if not obj then return end
+    pcall(function()
+        local signals = {"MouseButton1Click", "Activated"}
+        for _, sig in pairs(signals) do
+            local conns = getconnections(obj[sig])
+            for _, conn in pairs(conns) do
+                conn:Fire()
+                task.wait(0.1) 
+            end
+        end
+        obj:Activate()
+    end)
+end
+  task.spawn(function()
     task.wait(15) 
     while true do
-        task.wait(2)
-        local activePlayers = #game:GetService("Players"):GetPlayers()
+        task.wait(5) 
+        local activePlayers = 0
         local jewFound = false
-        
         for _, v in pairs(pGui:GetDescendants()) do
             if v:IsA("TextLabel") and v.Visible then
+                
+                
                 local cleanText = v.Text:gsub("%D", "")
                 local val = #cleanText > 0 and tonumber(cleanText)
                 
-                if val and val >= JEW_LIMIT then
-                    -- Ignore labels that are just ping
-                    if not v.Name:lower():find("ping") and not v.Parent.Name:lower():find("ping") then
-                        jewFound = true
+                if val then
+                    if val >= JEW_LIMIT then
+                        if v.Parent.Name:lower():find("slot") or v.Parent.Name:lower():find("score") or v.Name:lower():find("points") then
+                            jewFound = true
+                        end
                     end
+                end
+
+                if v.Text:find("@") and v.Text ~= "" then
+                    activePlayers = activePlayers + 1
                 end
             end
         end
         
-        print("Status: " .. activePlayers .. " players. Score Trigger: " .. tostring(jewFound))
+        print("Status: " .. activePlayers .. " players found. Jew: " .. tostring(jewFound))
         
         if jewFound then
             Hop("Score limit reached.")
             break
-        elseif activePlayers < MIN_NIGGERS then
+        elseif activePlayers > 0 and activePlayers < MIN_NIGGERS then
             Hop("Server too empty (" .. activePlayers .. " players).")
             break
         end
     end
 end)
-
-
 task.spawn(function()
-    while true do
-        task.wait(0.5)
-        local found = false
-        
-        for _, v in pairs(pGui:GetDescendants()) do
-            
-            if v:IsA("TextLabel") and string.find(v.Text, "Join this game!") then
-                local btn = v.Parent:FindFirstChildOfClass("ImageButton") or v.Parent:FindFirstChildOfClass("TextButton") or v:FindFirstAncestorOfClass("ImageButton")
-                if btn then
-                    pcall(function()
-                        for _, conn in pairs(getconnections(btn.MouseButton1Click)) do
-                            conn:Fire()
-                        end
-                        btn:Activate()
-                    end)
-                    found = true
-                    break
-                end
-            end
-            
-            
-            if v:IsA("TextLabel") and v.Text:find("Free For All") and v.Visible then
-                local ffa = v:FindFirstAncestorOfClass("GuiButton") or v.Parent:FindFirstChildOfClass("GuiButton")
-                if ffa then ffa:Activate() end
-            end
+    task.wait(5)
+    for _, v in pairs(pGui:GetDescendants()) do
+        if v:IsA("TextLabel") and v.Text:find("Free For All") then
+            forceClick(v:FindFirstAncestorOfClass("GuiButton") or v)
+            break
         end
-        
-        
-        if not found then
-            for _, b in pairs(pGui:GetDescendants()) do
-                if b:IsA("ImageButton") and b.ImageColor3 == Color3.fromRGB(155, 255, 0) then
-                    b:Activate()
-                    break
-                end
-            end
+    end
+    task.wait(3)
+    for _, v in pairs(pGui:GetDescendants()) do
+        if v:IsA("TextLabel") and v.Text:find("Join this game!") then
+            forceClick(v.Parent:FindFirstChildOfClass("GuiButton") or v:FindFirstAncestorOfClass("GuiButton"))
+            break
         end
     end
 end)
 
-Notify("Script loaded, discord copied to clipboard")
+
+Notify("Script loaded, discord copied to clipboard") 
+
+
+-- gg/yabu
+-- this was made by arko :(  (aka luna)
+-- i hate jews and niggers
+-- change min niggers to the number ofppl when u want to server hop
+-- i would make ui to make that part easier but im bad at them
+-- idk if it will get detected for cheats 
