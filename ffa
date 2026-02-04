@@ -72,7 +72,7 @@ local function Hop(reason)
                     
                     if not tpSuccess then
                         fullServerBlacklist[s.id] = true
-                        task.wait(1)
+                        task.wait(15)
                     else
                         return true 
                     end
@@ -84,7 +84,7 @@ local function Hop(reason)
 
     while true do
         if fetchAndTeleport() then break end
-        task.wait(3)
+        task.wait(15)
     end
 end
 local function forceClick(obj)
@@ -104,7 +104,7 @@ end
   task.spawn(function()
     task.wait(15) 
     while true do
-        task.wait(10) 
+        task.wait(15) 
         local activePlayers = 0
         local jewFound = false
         for _, v in pairs(pGui:GetDescendants()) do
