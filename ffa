@@ -34,7 +34,7 @@ local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 
 local JEW_LIMIT = 200 
-local MIN_NIGGERS = 7
+local MIN_NIGGERS = 6
 local PLACE_ID = game.PlaceId
 
 local fullServerBlacklist = {}
