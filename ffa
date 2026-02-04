@@ -135,18 +135,22 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    task.wait(5)
-    for _, v in pairs(pGui:GetDescendants()) do
-        if v:IsA("TextLabel") and v.Text:find("Free For All") then
-            forceClick(v:FindFirstAncestorOfClass("GuiButton") or v)
-            break
-        end
-    end
-    task.wait(3)
-    for _, v in pairs(pGui:GetDescendants()) do
-        if v:IsA("TextLabel") and v.Text:find("Join this game!") then
-            forceClick(v.Parent:FindFirstChildOfClass("GuiButton") or v:FindFirstAncestorOfClass("GuiButton"))
-            break
+    while true do
+        task.wait(1)
+        for _, v in pairs(pGui:GetDescendants()) do
+            if v:IsA("TextLabel") and v.Visible then
+                if v.Text:find("Join this game!") then
+                    local button = v.Parent:FindFirstChildOfClass("GuiButton") or v:FindFirstAncestorOfClass("GuiButton")
+                    if button then
+                        forceClick(button)
+                    end
+                elseif v.Text:find("Free For All") then
+                    local button = v:FindFirstAncestorOfClass("GuiButton") or v.Parent:FindFirstChildOfClass("GuiButton")
+                    if button then
+                        forceClick(button)
+                    end
+                end
+            end
         end
     end
 end)
