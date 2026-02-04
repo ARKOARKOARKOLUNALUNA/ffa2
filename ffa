@@ -24,13 +24,7 @@ local function Notify(text)
     end)
 end
 
--- how do i make it round :(
--- WELL UR GONNA HAVE TO KEEP IT IDK HOW TO MAKE ROUND
--- only good with basic uis
-
-
 setclipboard("https://discord.gg/ZbKkP2X7ps")
-
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
@@ -38,7 +32,6 @@ local lp = game:GetService("Players").LocalPlayer
 local pGui = lp:WaitForChild("PlayerGui")
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
-
 
 local JEW_LIMIT = 200 
 local MIN_NIGGERS = 7
@@ -102,25 +95,23 @@ local function forceClick(obj)
 end
 
 task.spawn(function()
-    task.wait(15) 
+    task.wait(15)
     while true do
-        task.wait(2) 
+        task.wait(2)
         local activePlayers = 0
         local jewFound = false
         
         for _, v in pairs(pGui:GetDescendants()) do
             if v:IsA("TextLabel") and v.Visible then
-                -- Check for player count using the @ symbol
                 if v.Text:find("@") and v.Text ~= "" then
                     activePlayers = activePlayers + 1
                 end
 
-               
                 local cleanText = v.Text:gsub("%D", "")
                 local val = #cleanText > 0 and tonumber(cleanText)
                 
                 if val and val >= JEW_LIMIT then
-                    if v.Name:lower():find("point") or v.Parent.Name:lower():find("score") or v.Parent.Name:lower():find("row") then
+                    if not v.Name:lower():find("ping") and not v.Parent.Name:lower():find("ping") then
                         jewFound = true
                     end
                 end
@@ -156,11 +147,4 @@ task.spawn(function()
     end
 end)
 
-Notify("Script loaded, discord copied to clipboard") 
-
--- gg/yabu
--- this was made by arko :(  (aka luna)
--- i hate jews and niggers
--- change min niggers to the number ofppl when u want to server hop
--- i would make ui to make that part easier but im bad at them
--- idk if it will get detected for cheats
+Notify("Script loaded, discord copied to clipboard")
