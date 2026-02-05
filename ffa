@@ -147,7 +147,7 @@ task.spawn(function()
             break
         end
     end
-    task.wait(3)
+    task.wait(15)
     for _, v in pairs(pGui:GetDescendants()) do
         if v:IsA("TextLabel") and v.Text:find("Join this game!") then
             forceClick(v.Parent:FindFirstChildOfClass("GuiButton") or v:FindFirstAncestorOfClass("GuiButton"))
